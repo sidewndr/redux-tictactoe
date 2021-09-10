@@ -10,6 +10,7 @@ import {
   restartGameAction,
   setWinnerAction
 } from "../store/gameReducer";
+import {addScoreAction} from "../store/scoreReducer";
 
 
 const GameFieldStl = styled.div`
@@ -67,6 +68,10 @@ export const GameField = () => {
     }
   }, [fieldValues])
 
+  useEffect(() => {
+    dispatch(addScoreAction(winnerValue))
+  }, [winnerValue])
+
   const handleClick = (index) => {
     if (!fieldValues[index]) {
       dispatch(addValueAction(index))
@@ -75,11 +80,6 @@ export const GameField = () => {
 
     if (winnerValue) {
       dispatch(restartGameAction())
-
-    //   dispatch({
-    //     type: 'ADD_SCORE',
-    //     payload: winnerInfo.winner
-    //   })
     }
   }
 
