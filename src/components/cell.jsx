@@ -1,6 +1,11 @@
 import React from 'react'
 import styled, {css} from 'styled-components'
 
+export const CellVariant = {
+  default: 'default',
+  win: 'win',
+  lose: 'lose'
+}
 
 export const CellStl = styled.div`
   display: flex;
@@ -11,17 +16,19 @@ export const CellStl = styled.div`
   cursor: pointer;
   user-select: none;
   
-  ${({isWinner}) => {
-    if (isWinner === null) {
-      return css`
-        color: white;
-      `
-    } else if (isWinner === true) {
+  ${({variant}) => {
+    if (variant === CellVariant.default) {
+      return undefined
+    }  
+    
+    if (variant === CellVariant.win) {
       return css`
         color: white;
         font-weight: bold;
       `
-    } else if (isWinner === false) {
+    }
+    
+    if (variant === CellVariant.lose) {
       return css`
         color: gray;
       `
@@ -30,11 +37,11 @@ export const CellStl = styled.div`
 `
 
 
-export const Cell = ({value, onClick, isWinner}) => {
+export const Cell = ({value, variant, onClick}) => {
   return (
     <CellStl
+      variant={variant}
       onClick={onClick}
-      isWinner={isWinner}
     >
       {value}
     </CellStl>

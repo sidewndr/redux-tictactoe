@@ -1,29 +1,49 @@
 const defaultState = {
   currentTurn: 'X',
+
   fieldValues: [
     null, null, null,
     null, null, null,
     null, null, null
-  ]
+  ],
+
+  winnerInfo: {
+    winnerValue: null,
+    winnerLine: null
+  }
 }
+
+const ADD_VALUE = 'ADD_VALUE'
+const CHANGE_CURRENT_TURN = 'CHANGE_CURRENT_TURN'
+const SET_WINNER = 'SET_WINNER'
+const RESTART_GAME = 'RESTART_GAME'
 
 export const gameReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case 'ADD_VALUE': {
+    case ADD_VALUE: {
       const temp = [...state.fieldValues]
       temp[action.payload] = state.currentTurn
 
       return {...state, fieldValues: [...temp]}
     }
 
-    case 'CHANGE_CURRENT_TURN':
+    case CHANGE_CURRENT_TURN:
       return {...state, currentTurn: state.currentTurn === 'X' ? 'O' : 'X'}
 
-    case 'RESTART_GAME': {
-      const temp = [...state.fieldValues]
-      temp.fill(null)
+    case SET_WINNER:
+      return {...state, winnerInfo: action.payload}
 
-      return {...state, currentTurn: 'X', fieldValues: [...temp]}
+    case RESTART_GAME: {
+      const tempValues = [...state.fieldValues]
+      tempValues.fill(null)
+
+      let tempWinnerInfo = Object.entries(state.winnerInfo)
+      tempWinnerInfo.forEach((item) => {
+        item.fill(null, 1)
+      })
+      tempWinnerInfo = Object.fromEntries(tempWinnerInfo)
+
+      return {...state, currentTurn: 'X', fieldValues: [...tempValues], winnerInfo: {...tempWinnerInfo}}
     }
 
     default:
@@ -31,9 +51,15 @@ export const gameReducer = (state = defaultState, action) => {
   }
 }
 
+
+export const addValueAction = (payload) => ({type: ADD_VALUE, payload})
+export const changeCurrentTurnAction = () => ({type: CHANGE_CURRENT_TURN})
+export const setWinnerAction = (payload) => ({type: SET_WINNER, payload})
+export const restartGameAction = () => ({type: RESTART_GAME})
+
 export const calculateWinner = (fieldValues) => {
   const winnerInfo = {
-    winner: null,
+    winnerValue: null,
     winnerLine: null
   }
 
@@ -54,14 +80,14 @@ export const calculateWinner = (fieldValues) => {
     const [a, b, c] = line
 
     if (fieldValues[a] && fieldValues[a] === fieldValues[b] && fieldValues[a] === fieldValues[c]) {
-      winnerInfo.winner = fieldValues[a]
+      winnerInfo.winnerValue = fieldValues[a]
       winnerInfo.winnerLine = [a, b, c]
     }
   })
 
   const emptyValues = fieldValues.filter((item) => item === null)
-  if (emptyValues.length === 0) {
-    winnerInfo.winner = 'Draw'
+  if (emptyValues.length === 0 && !winnerInfo.winnerValue) {
+    winnerInfo.winnerValue = 'Draw'
   }
 
   return winnerInfo

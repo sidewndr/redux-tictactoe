@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import {GlobalStyles} from "./shared/globalStyles/globalStyles";
 import {Provider} from "react-redux";
 import {store} from "./store";
-import {GameField} from "./components/molecules/gameField";
+import {Page} from "./pages/page";
 
 const App = () => {
   return (
     <Provider store={store}>
       <GlobalStyles />
-      <GameField />
+      <Page />
     </Provider>
   )
 }
