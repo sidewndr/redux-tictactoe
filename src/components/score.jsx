@@ -1,44 +1,60 @@
 import React from 'react'
 import styled from 'styled-components'
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
+import {v4 as uuid} from "uuid";
 
 
-const ContainerStl = styled.div`
+const ScoreContainerStl = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 150px);
-  grid-template-rows: repeat(2, 100);
-  
-  justify-content: center;
   justify-items: center;
-`
-
-const ScoreTitleStl = styled.div`
-  
+  user-select: none;
 `
 
 const ScoreStl = styled.div`
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const ScoreTitleStl = styled.div`
+  font-size: 28px;
+`
+
+const ScoreValueStl = styled.div`
+  margin-top: 20px;
 `
 
 
 export const Score = () => {
-  const dispatch = useDispatch()
-  const {xScore, drawScore, oScore} = useSelector((state) => state.score)
-  console.log(xScore, drawScore, oScore)
+  const score = useSelector((state) => state.score)
+
+  const setTitle = (arr) => {
+    switch (arr[0]) {
+      case 'xScore': return 'x'
+      case 'oScore': return 'o'
+      default: return '-'
+    }
+  }
 
   return (
-    <ContainerStl>
-      <ScoreTitleStl>
-        X
-      </ScoreTitleStl>
-
-      <ScoreTitleStl>
-        -
-      </ScoreTitleStl>
-
-      <ScoreTitleStl>
-        O
-      </ScoreTitleStl>
-    </ContainerStl>
+    <ScoreContainerStl>
+      {
+        Object.entries(score).map((item) => (
+          <ScoreStl
+            key={uuid()}
+          >
+            <ScoreTitleStl>
+              {
+                setTitle(item)
+              }
+            </ScoreTitleStl>
+            <ScoreValueStl>
+              {item[1]}
+            </ScoreValueStl>
+          </ScoreStl>
+        ))
+      }
+    </ScoreContainerStl>
   )
 }

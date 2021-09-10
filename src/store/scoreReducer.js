@@ -1,7 +1,7 @@
 const defaultState = {
   xScore: 0,
-  oScore: 0,
-  drawScore: 0
+  drawScore: 0,
+  oScore: 0
 }
 
 const ADD_SCORE = 'ADD_SCORE'
