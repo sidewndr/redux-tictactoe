@@ -43,7 +43,7 @@ export const gameReducer = (state = defaultState, action) => {
       })
       tempWinnerInfo = Object.fromEntries(tempWinnerInfo)
 
-      return {...state, currentTurn: 'X', fieldValues: [...tempValues], winnerInfo: {...tempWinnerInfo}}
+      return {...state, fieldValues: [...tempValues], winnerInfo: {...tempWinnerInfo}}
     }
 
     default:
